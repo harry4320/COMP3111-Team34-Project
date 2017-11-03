@@ -45,27 +45,31 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			{if (decision.toLowerCase().equals("exit")) state=1;
 			else if (decision.equals("1")) {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time= ? where (username='test');");
 			change_choice.setString(1, "breakfast");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=11;}
 			
 			else if (decision.equals("2"))  {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time= ? where (username='test');");
 			change_choice.setString(1, "lunch");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=11;}
 			else if (decision.equals("3"))  {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time= ? where (username='test');");
 			change_choice.setString(1, "dinner");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=11;}
 			else if (decision.equals("4"))  {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time= ? where (username='test');");
 			change_choice.setString(1, "dessert");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=12;}
 		break;}
@@ -73,35 +77,40 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		case 11:
 			{if (decision.toLowerCase().equals("exit")) state=1;
 			else if (decision.equals("1"))  {
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 			change_choice.setString(1, "vegetarian");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=111;}
 			
 			else if (decision.equals("2")) {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 			change_choice.setString(1, "chicken");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=111;}
 			else if (decision.equals("3"))  {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 			change_choice.setString(1, "pork");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=111;}
 			
 			else if (decision.equals("4")) {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 			change_choice.setString(1, "beef");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=111;}
 			
 			else if (decision.equals("5")) {
 				
-			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 			change_choice.setString(1, "nothing");
+			change_choice.executeUpdate();
 			change_choice.close();		
 			state=111;}
 			
@@ -110,14 +119,16 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		case 12:
 			{if (decision.toLowerCase().equals("exit")) state=1;
 			else if (decision.equals("1"))  {
-				PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 				change_choice.setString(1, "vegetarian");
+				change_choice.executeUpdate();
 				change_choice.close();		
 				state=112;}
 				
 			else if (decision.equals("2")) {
-				PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
+				PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type= ? where (username='test');");
 				change_choice.setString(1, "nothing");
+				change_choice.executeUpdate();
 				change_choice.close();		
 				state=112;}
 			break;
