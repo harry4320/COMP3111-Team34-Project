@@ -145,7 +145,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		//update state to user_info
 		String change_state_statement="UPDATE users_info SET state="+Integer.toString(state)+" where username='test';";
 		PreparedStatement change_state = connection.prepareStatement(change_state_statement);
-		change_state.executeUpdate();
 		change_state.close();
 
 
