@@ -19,11 +19,17 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		int user_count = 0;
 		boolean data_exist = false;
+		int today = 0;
+		Calendar c = Calendar.getInstance();
+		//Date d = c.getTime();
+		//c.setTime(d);
+		today = c.get(Calendar.DAY_OF_YEAR);
 		Connection connection = getConnection();
 		
 		//Create data in user_info
-		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		PreparedStatement stmt1 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'nothing', 'nothing', '0', 0, 0, 'default', ?)");
 		stmt1.setString(1, userId);
+		stmt1.setInt(2,today);
 		stmt1.executeUpdate();
 
 		
@@ -73,16 +79,47 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		return result;
 	}
 	
+	String getInfoState(String userId) throws Exception { 
+		String state = "default";
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT info_state FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			state = rs.getString(1);
+			connection.close();
+			return state;
+		}else {
+			connection.close();
+			return state;
+		}
+	}
+	void setInfoState(String text, String userId) throws Exception{
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("UPDATE user_info set info_state = ? where user_id = ?");
+		stmt.setString(1, text);
+		stmt.setString(2, userId);
+		stmt.executeUpdate();
+		connection.close();
+		return;
+	}
+	
 	String weight(String text, String userId) throws Exception {
 		//Write your code here
+		int weight = 0;
 		String result = null;
 		String[] items;
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
-		int weight = Integer.parseInt(items[1]);
+		/*if(items[0] == "weight") {
+			weight = Integer.parseInt(items[1]);
+		}else {
+			weight = Integer.parseInt(items[0]);
+		}*/
+		weight = Integer.parseInt(items[0]);
 		if(weight<=0)
 		{
-			result = "Weight can not be zero or negative! Please try again with a valid input";
+			result = "Weight can not be zero or negative! Please use the info function again and enter a valid input";
 			return result;
 		}
 		Connection connection = getConnection();
@@ -104,6 +141,105 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 			return result;
 		
+	}
+	
+	String height(String text, String userId) throws Exception {
+		//Write your code here
+		int height = 0;
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		boolean data_exists = false;
+		height = Integer.parseInt(items[0]);
+		if(height<=0)
+		{
+			result = "Height can not be zero or negative! Please use the info function again and enter a valid input";
+			return result;
+		}
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+		}
+		rs.close();
+		if(data_exists)
+		{
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set height = ? where user_id = ?");
+			stmt2.setInt(1, height);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
+			connection.close();
+			result = "Data updated! Your height has been set to " + height + "cm";
+		}
+			return result;
+		
+	}
+	
+	String age(String text, String userId) throws Exception {
+		//Write your code here
+		int age = 0;
+		String result = null;
+		String[] items;
+		items = text.split("\\r?\\n");
+		boolean data_exists = false;
+		age = Integer.parseInt(items[0]);
+		if(age<=0)
+		{
+			result = "Age can not be zero or negative! Please use the info function again and enter a valid input";
+			return result;
+		}
+		Connection connection = getConnection();
+		PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			data_exists = true;
+		}
+		rs.close();
+		if(data_exists)
+		{
+			PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set age = ? where user_id = ?");
+			stmt2.setInt(1, age);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
+			connection.close();
+			result = "Data updated! Your age has been set to " + age;
+		}
+			return result;
+		
+	}
+	
+	String sex(String text, String userId) throws Exception {
+		String result = null;
+		boolean data_exists = false;
+		if(text.equals("M") || text.equals("F"))
+		{
+			Connection connection = getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM user_info WHERE user_id = ?");
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				data_exists = true;
+			}
+			rs.close();
+			if(data_exists)
+			{
+				PreparedStatement stmt2 = connection.prepareStatement("UPDATE user_info set sex = ? where user_id = ?");
+				stmt2.setString(1, text);
+				stmt2.setString(2, userId);
+				stmt2.executeUpdate();
+				connection.close();
+				result = "Data updated! Your sex has been set to " + text;
+			}
+				return result;
+		}
+		else {
+			result = "Your Sex is invalid! Please try again using the info function.";
+			return result;
+					
+		}
 	}
 	
 	String waterInterval(String text, String userId) throws Exception {
@@ -161,7 +297,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 					stmtSave.close();
 				}
 				else if (curDT.getTime() > (old_time + rs.getLong("water_int"))) {
-					results = "\n\nRemember to drink some water!";
+					results = "Remember to drink some water!";
 					PreparedStatement stmtSave = connection.prepareStatement("UPDATE user_info SET water_time = ? WHERE user_id = ?");
 					stmtSave.setLong(1, curDT.getTime());
 					stmtSave.setString(2, userId);
@@ -229,7 +365,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 						stmt.close();
 						connection.close();
 						}
-						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)\n\n");
+						resultbuilder.append(dishes[i] + ":\nWeight = " + weight_total + " (g)\nEnergy = " + energy_total + " (kcal)\nSodium = " + sodium_total + " (g)\nFatty Acids = " + fat_total + " (g)");
 							
 			}			
 		}catch(Exception e){
@@ -255,14 +391,14 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			energy = rs.getInt(3) + rs.getInt(4) + rs.getInt(5) + rs.getInt(6) + rs.getInt(7) + rs.getInt(8) + rs.getInt(9); 			
 		}
 		rs.close();
-		if(weight!=0)
+		if(weight>0)
 		{
-			result = "Total energy is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\n\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming) : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
+			result = "Total energy intake(for the last 7 days) is : " + energy + " kcal.\nyour weight is : " + weight + "kg.\n\nTime required to consume:\nLight(e.g. walking) : " + energy/(weight*light_multiplier) + " hr\nMedium(e.g. jogging) : " + energy/(weight*medium_multiplier) + " hr\nHeavy(e.g. running, swimming) : " + energy/(weight*heavy_multiplier) + " hr\n"  ;
 			return result;
 		}
 		else
 		{
-			result = "Weight can not be zero!";
+			result = "Your Weight is invalid! Please set your weight first";
 			return result;
 		}
 
@@ -274,7 +410,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		String result = null;
 		String[] items = new String[4];
 		int weekday_time = 0;
-		String energy_X; 
 		items = text.split("\\r?\\n");
 		boolean data_exists = false;
 		int energy = Integer.parseInt(items[1]);
@@ -284,37 +419,30 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		switch(items[2].toLowerCase()) {
 			case "sun":{
 				weekday_time = 1;
-				energy_X = "energy_1";
 				break;
 			}
 			case "mon":{
 				weekday_time = 2;
-				energy_X = "energy_2";
 				break;
 			}
 			case "tue":{
 				weekday_time = 3;
-				energy_X = "energy_3";
 				break;
 			}
 			case "wed":{
 				weekday_time = 4;
-				energy_X = "energy_4";
 				break;
 			}
 			case "thu":{
 				weekday_time = 5;
-				energy_X = "energy_5";
 				break;
 			}
 			case "fri":{
 				weekday_time = 6;
-				energy_X = "energy_6";
 				break;
 			}
 			case "sat":{
 				weekday_time = 7;
-				energy_X = "energy_7";
 				break;
 			}
 			default:{
@@ -322,9 +450,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				//Date d = c.getTime();
 				//c.setTime(d);
 				weekday_time = c.get(Calendar.DAY_OF_WEEK);
-				energy_X = "energy_" + weekday_time;
 				System.out.println("Test: " + weekday_time);
-				System.out.println("Test: " + energy_X);
 			}
 		}
 		System.out.println(weekday_time);
@@ -343,130 +469,25 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		rs.close();
 		if(data_exists)
 		{
+			String sql = "UPDATE user_info set energy_" + weekday_time + " = ? where user_id = ?";
 			PreparedStatement stmt2;
-			switch(energy_X) {
-				case "energy_1":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_1 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_2":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_2 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_3":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_3 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_4":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_4 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_5":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_5 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_6":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_6 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				case "energy_7":{
-					stmt2 = connection.prepareStatement("UPDATE user_info set energy_7 = ? where user_id = ?");
-					stmt2.setInt(1, energy);
-					stmt2.setString(2, userId);
-					stmt2.executeUpdate();
-					break;
-				}
-				default:{
-					break;
-				}
-			}
+			stmt2 = connection.prepareStatement(sql);
+			stmt2.setInt(1, energy);
+			stmt2.setString(2, userId);
+			stmt2.executeUpdate();
 			connection.close();
 			result = "Data updated!";
 			return result;
 		}
 		else
 		{
+			String sql = "INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_" + weekday_time + " = ? where user_id = ?";
 			PreparedStatement stmt3;
-			switch(energy_X) {
-				case "energy_1":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_1 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_2":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_2 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_3":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_3 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_4":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_4 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_5":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_5 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_6":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_6 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				case "energy_7":{
-					stmt3 = connection.prepareStatement("INSERT INTO user_info VALUES (? , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); UPDATE user_info set energy_7 = ? where user_id = ?");
-					stmt3.setString(1, userId);
-					stmt3.setInt(2, energy);
-					stmt3.setString(3, userId);
-					stmt3.executeUpdate();
-					break;
-				}
-				default:{
-					break;
-				}
-			}
-			
+			stmt3 = connection.prepareStatement(sql);
+			stmt3.setString(1, userId);
+			stmt3.setInt(2, energy);
+			stmt3.setString(3, userId);
+			stmt3.executeUpdate();
 			connection.close();
 			result = "Data added to our database!";
 			return result;
@@ -624,12 +645,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		find_state1.close();
 		find_state.close();
 		
-		
-		
-		
-		
-		
-		
 		switch (state) { //change state
 		case 0:
 		{
@@ -736,17 +751,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			{if (decision.toLowerCase().equals("exit")) state=1;
 			break;}
 			
-
-
 		default:{
 			if (decision.toLowerCase().equals("exit")) state=1;
 			break;
 		}
 		}
-		
-		
-
-		
 		
 		//update state to user_info
 		String change_state_statement="UPDATE users_info SET state="+Integer.toString(state)+" where username='test';";
