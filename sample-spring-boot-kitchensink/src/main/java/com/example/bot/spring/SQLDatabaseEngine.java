@@ -37,15 +37,14 @@ try {
 	
 	switch (state) { //change state
 	case 0:
-	{
 		if (text.equals("1")) state=1;
 		else if (text.equals("2")) state=2;
 		else if (text.equals("3")) state=3;
 		else if (text.equals("4")) state=4;
-	break;}
+	break;
 	
 	case 1: //meal menu
-		{if (text.toLowerCase().equals("exit")) state=0;
+		if (text.toLowerCase().equals("exit")) state=0;
 		else if (text.equals("1")) {
 			
 		PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time=? where (username='test');");
@@ -71,10 +70,10 @@ try {
 		change_choice.setString(1, "dessert");
 		change_choice.close();		
 		state=12;}
-	break;}
+	break;
 	
 	case 11:
-		{if (text.toLowerCase().equals("exit")) state=0;
+		if (text.toLowerCase().equals("exit")) state=0;
 		else if (text.equals("1"))  {
 		PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
 		change_choice.setString(1, "vegetarian");
@@ -108,10 +107,10 @@ try {
 		change_choice.close();		
 		state=111;}
 		
-		break;	}
+		break;	
 		
 	case 12:
-		{if (text.toLowerCase().equals("exit")) state=0;
+		if (text.toLowerCase().equals("exit")) state=0;
 		else if (text.equals("1"))  {
 			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
 			change_choice.setString(1, "vegetarian");
@@ -124,34 +123,35 @@ try {
 			change_choice.close();		
 			state=112;}
 		break;
-		}
+		
 		
 	case 111: //choose dishes function	
-		{if (text.toLowerCase().equals("exit")) state=0;
-		break;}
+		if (text.toLowerCase().equals("exit")) state=0;
+		break;
 	case 112: //choose dessert function
-		{if (text.toLowerCase().equals("exit")) state=0;
-		break;}
+		if (text.toLowerCase().equals("exit")) state=0;
+		break;
 		
 	
 	case 2://show nutition details of each food
-		{if (text.toLowerCase().equals("exit")) state=0;
+		if (text.toLowerCase().equals("exit")) state=0;
 		
 	break;
-		}
+	
 	case 3:
-	{
+		
 		if (text.toLowerCase().equals("exit")) state=0;
 		break;
-	}
-	case 4:{
+		
+	case 4:
 		if (text.toLowerCase().equals("exit")) state=0;
 		break;
-	}
-	default:{
+		
+	default:
 		if (text.toLowerCase().equals("exit")) state=0;
 		break;
-	}
+		
+	
 	}
 	
 
@@ -167,19 +167,19 @@ try {
 	switch (state) {
 	case 0: //features menu
 	
-	{
+	
 	String feature_menu="Welcome! What do you want to do now?\n"
 			+ "1. Meal Menu\n2.Search nutition details of food\n"
 			+ "3.Track taken energy\n4.Calculate exercise needed\n";
-	return feature_menu;}
+	return feature_menu;
 	
 
 	case 1: //meal menu, feature 1,4,8,9,10
-	{return "Meal menu\ntype exit can go back feature menu"
-			+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\ntype exit to go back feature table";}
+	return "Meal menu\ntype exit can go back feature menu"
+			+ "\n1.Breakfast \n2.Lunch \n3.Dinner \n4. Dessert\ntype exit to go back feature table";
 	
-	case 11:{return "What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care\ntype exit to go back feature table";	}	
-	case 12: {return "Are you vegetarian?\n1.yes\n2.no\ntype exit to go back feature table";}
+	case 11:return "What type of food do you like to choose?\n1.Vegetarian\n2.Chicken\n3.Pork\n4.Beef\n5.Don't care\ntype exit to go back feature table";		
+	case 12: return "Are you vegetarian?\n1.yes\n2.no\ntype exit to go back feature table";
 		
 	case 111:{ //print dishes
 		PreparedStatement get_users_final_choice = connection.prepareStatement("SELECT * FROM users_choice where (username='test');");
@@ -241,13 +241,13 @@ try {
 	
 	
 	case 2: //show nutition details of each food, feature 3
-		{return "This is second function\ntype exit can go back feature menu";}
+		return "This is second function\ntype exit can go back feature menu";
 		
 		
 		
 
 	case 3://track taken energy, feature 6
-		{PreparedStatement track_energy = connection.prepareStatement("SELECT * FROM users_info where username='test';");
+		PreparedStatement track_energy = connection.prepareStatement("SELECT * FROM users_info where username='test';");
 		ResultSet track_energy1=track_energy.executeQuery();
 		track_energy1.next();
 
@@ -279,13 +279,13 @@ try {
 		return message;	
 		
 		
-		}
+		
 
 	case 4://calculate exercises needed, feature 7
-		{return "Calculate exercises needed\ntype exit can go back feature menu";
+		return "Calculate exercises needed\ntype exit can go back feature menu";
 		
 		
-		}
+		
 	default:
 		break;
 
