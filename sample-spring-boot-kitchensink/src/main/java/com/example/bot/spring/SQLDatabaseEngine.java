@@ -29,12 +29,6 @@ try {
 	find_state.close();
 	
 	
-	
-	
-	
-	
-	
-	
 	switch (state) { //change state
 	case 0:
 		if (text.equals("1")) state=1;
@@ -155,12 +149,6 @@ try {
 	}
 	
 
-	//update state to user_info
-	PreparedStatement change_state = connection.prepareStatement("UPDATE users_info SET state=? where username='test';");
-	change_state.setInt(1,state);
-	change_state.close();
-	connection.close();
-	
 	
 	
 	// feature 2 need push message function, overconsume nutrition warning
@@ -293,7 +281,11 @@ try {
 	
 	}
 	
-
+	//update state to user_info
+	PreparedStatement change_state = connection.prepareStatement("UPDATE users_info SET state=? where username='test';");
+	change_state.setInt(1,state);
+	change_state.close();
+	connection.close();
 	
 	
 	
