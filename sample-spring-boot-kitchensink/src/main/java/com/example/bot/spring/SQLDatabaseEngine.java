@@ -183,23 +183,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			
 			String statement="";
 			
-			PreparedStatement  get_dishes=null;
 			if (users_final_type.equals("nothing")){
-				
-				get_dishes = connection.prepareStatement("SELECT * FROM meal_menu where ((choose_meal_time= ? ) and (username='test'));");
-				get_dishes.setString(1,users_final_time);
-				//statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (username='test'));";
+				statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (username='test'));";
 			}
 			else {
-			
-				get_dishes = connection.prepareStatement("SELECT * FROM meal_menu where ((choose_meal_time= ? ) and (choose_type= ? ) and (username='test'));");
-				get_dishes.setString(1,users_final_time);
-				get_dishes.setString(2,users_final_type);
-				//statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (choose_type='"+users_final_type+"') and (username='test'));";
+			statement="SELECT * FROM meal_menu where ((choose_meal_time='"+users_final_time+"') and (choose_type='"+users_final_type+"') and (username='test'));";
 			}
-
-			
-	//		PreparedStatement get_dishes = connection.prepareStatement(statement);
+			PreparedStatement get_dishes = connection.prepareStatement(statement);
 			ResultSet get_dishes1=get_dishes.executeQuery();
 			int count_dishes=1;
 			
