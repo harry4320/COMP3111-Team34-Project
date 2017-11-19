@@ -17,8 +17,6 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	//@Override
 	String order(String userID, String decision) throws Exception {
 		
-		
-		try {
 		Connection connection = getConnection();
 		
 		//find state
@@ -143,8 +141,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 		
 		//update state to user_info
-		String change_state_statement="UPDATE users_info SET state="+Integer.toString(state)+" where username='test';";
-		PreparedStatement change_state = connection.prepareStatement(change_state_statement);
+		PreparedStatement change_state = connection.prepareStatement("UPDATE users_info SET state=? where username='test';");
+		change_state.setInt(1,state);
 		change_state.close();
 
 
@@ -235,10 +233,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		
 		
 		
-		}catch(Exception e){
-			System.out.println(e);
-		}	
-		return null;
+		
 	}
 	
 	
