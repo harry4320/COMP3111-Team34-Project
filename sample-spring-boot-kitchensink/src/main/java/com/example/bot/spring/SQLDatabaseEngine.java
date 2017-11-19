@@ -40,7 +40,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		break;}
 		
 		case 1: //meal menu
-			{if (decision.toLowerCase().equals("exit")) state=1;
+			{if (decision.toLowerCase().equals("exit")) state=0;
 			else if (decision.equals("1")) {
 				
 			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_meal_time=? where (username='test');");
@@ -69,7 +69,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		break;}
 		
 		case 11:
-			{if (decision.toLowerCase().equals("exit")) state=1;
+			{if (decision.toLowerCase().equals("exit")) state=0;
 			else if (decision.equals("1"))  {
 			PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
 			change_choice.setString(1, "vegetarian");
@@ -106,7 +106,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			break;	}
 			
 		case 12:
-			{if (decision.toLowerCase().equals("exit")) state=1;
+			{if (decision.toLowerCase().equals("exit")) state=0;
 			else if (decision.equals("1"))  {
 				PreparedStatement change_choice = connection.prepareStatement("UPDATE users_choice SET choose_type=? where (username='test');");
 				change_choice.setString(1, "vegetarian");
@@ -122,22 +122,31 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			}
 			
 		case 111: //choose dishes function	
-			{if (decision.toLowerCase().equals("exit")) state=1;
+			{if (decision.toLowerCase().equals("exit")) state=0;
 			break;}
 		case 112: //choose dessert function
-			{if (decision.toLowerCase().equals("exit")) state=1;
+			{if (decision.toLowerCase().equals("exit")) state=0;
 			break;}
 			
 
 
 		default:{
-			if (decision.toLowerCase().equals("exit")) state=1;
+			if (decision.toLowerCase().equals("exit")) state=0;
 			break;
 		}
 		}
 		
 		
-
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		//update state to user_info
@@ -145,7 +154,18 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		change_state.setInt(1,state);
 		change_state.close();
 
-
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		String print_message="";
 		
